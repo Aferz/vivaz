@@ -1,0 +1,53 @@
+{
+  "name": "vivaz",
+  "author": "Alejandro Fernandez Rueda",
+  "version": "0.0.0",
+  "description": "Elegant syntax, dead-simple and yet powerful query builder for javascript.",
+  "main": "./dist/vivaz.common.js",
+  "directories": {
+    "test": "tests"
+  },
+  "files": [
+    "dist/vivaz.js",
+    "dist/vivaz.min.js",
+    "src"
+  ],
+  "scripts": {
+    "test": "npm run build-test && karma start build/karma.travis.config.js",
+    "test-dev": "npm run build-test && karma start build/karma.local.config.js",
+    "build-dev": "webpack --config build/webpack.dev.config.js --progress --colors",
+    "dev": "webpack --watch --config build/webpack.dev.config.js --progress --colors & npm run serve-test",
+    "build-test": "webpack --config build/webpack.test.config.js --progress --colors",
+    "serve-test": "webpack-dev-server --config build/webpack.test.config.js --host 0.0.0.0",
+    "release": "sh build/release.sh",
+    "build": "node build/build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Aferz/vivaz"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "babel-core": "^6.5.1",
+    "babel-loader": "^6.2.2",
+    "babel-preset-es2015": "^6.5.0",
+    "babel-preset-es2015-loose-rollup": "^7.0.0",
+    "envify": "^1.2.1",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.20",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-firefox-launcher": "^0.1.7",
+    "karma-jasmine": "^0.3.7",
+    "karma-phantomjs-launcher": "^1.0.0",
+    "karma-safari-launcher": "^0.1.1",
+    "karma-webpack": "^1.7.0",
+    "phantomjs-prebuilt": "^2.1.4",
+    "react": "^0.9.0",
+    "rollup": "^0.25.3",
+    "rollup-plugin-babel": "^2.3.9",
+    "uglify-js": "^2.6.1",
+    "webpack": "^1.12.13",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "dependencies": {}
+}

@@ -1,0 +1,6 @@
+node_modules
+tests/unit/specs.js.map
+dist/vivid.js.map
+.DS_Store
+coverage
+npm-debug.log

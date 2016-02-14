@@ -1,0 +1,24 @@
+{
+  "name": "Vivaz",
+  "homepage": "https://github.com/Aferz/vivaz",
+  "authors": [
+    "Alejandro Fernandez Rueda <alejandro.fernandez.rueda@gmail.com>"
+  ],
+  "description": "Elegant syntax, dead-simple and yet powerful query builder for javascript.",
+  "main": "dist/vivaz.min.js",
+  "moduleType": [],
+  "keywords": [
+    "query",
+    "builder",
+    "elegant",
+    "syntax"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
