@@ -13,10 +13,10 @@ var banner =
     ' */';
     
 var main = fs
-    .readFileSync( 'src/index.js', 'utf-8' )
+    .readFileSync( 'src/Vivaz.js', 'utf-8' )
     .replace( /Vivaz\._version = '[\d\.]+'/, "Vivaz._version = '" + version + "'" );
 
-fs.writeFileSync( 'src/index.js', main );
+fs.writeFileSync( 'src/Vivaz.js', main );
 
 // Common JS
 rollup.rollup( {
