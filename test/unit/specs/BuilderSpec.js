@@ -38,6 +38,11 @@ describe( 'Builder', function()
         expect( b.$groupBy ).toEqual( [] );
         expect( b.$orderBy ).toEqual( [] );
     } );
+    
+    it( 'Builder configuration', function()
+    {
+        
+    } );
 
     it( 'Clean', function()
     {

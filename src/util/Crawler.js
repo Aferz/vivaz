@@ -1,5 +1,5 @@
-export default Object.create( {
-
+const Crawler = Object.create( {
+    
     createGroupsRecursively: function( groups, element, groupLevel, groupedElement )
     {
         if( arguments.length == 2 )
@@ -108,14 +108,8 @@ export default Object.create( {
     splitNestedField: function( field )
     {
         return field.indexOf( '.' ) > -1 ? field.split( '.' ) : [ field ];
-    },
-
-    createModelInstance: function( constructor, args )
-    {
-        // Adds empty element, to match passed arguments with
-        // constructor arguments
-        var a = [ '' ].concat( Array.isArray( args ) ? args : [ args ] );
-        
-        return new ( Function.prototype.bind.apply( constructor, a ) );
     }
+    
 } );
+
+export default Crawler;

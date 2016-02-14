@@ -8,17 +8,19 @@ import WhereBetween from './where/WhereBetween';
 import OrderBy from './order/OrderBy';
 import OrderByDate from './order/OrderByDate';
 
-import Util from './util/Util';
+import Query from './util/Query';
+import Crawler from './util/Crawler';
 import Paginator from './util/Paginator';
 import Collection from './util/Collection';
-import QueryResolver from './util/QueryResolver';
 
-export default function Builder( data )
+export default function Builder( data, cfg )
 {
     if( !data || ( typeof data === 'object' && Object.keys( data ).length === 0 ) )
     {
         throw "No data supplied!";
     }
+    
+    this.$config = cfg;
     
     this.$original = !Array.isArray( data ) ? [data] : data;
     
@@ -365,7 +367,7 @@ Builder.prototype = {
     {
         this.$result = this.$original;
 
-        return QueryResolver.resolve.call( this ).$result;
+        return Query.resolve( this ).$result;
     },
 
     first: function()
@@ -435,11 +437,18 @@ Builder.prototype = {
             return [];
         }
 
+        var createModelInstance = function( constructor, args )
+        {
+            var a = [ '' ].concat( Array.isArray( args ) ? args : [ args ] );
+        
+            return new ( Function.prototype.bind.apply( constructor, a ) );
+        }
+
         // Check if properties of the results are already defined in constructor
         // This loop avoid 'ifing' when creating models. Better performance for bigger results
         var stomp      = override || false;
         var properties = Object.keys( this.$result[0] );
-        var testModel  = Util.createModelInstance( modelConstructor, args || [] );
+        var testModel  = createModelInstance( modelConstructor, args || [] );
         
         for( var i = 0; i < properties.length; i++ )
         {
@@ -454,7 +463,7 @@ Builder.prototype = {
 
         for( var i = 0; i < this.$result.length; i++ )
         {
-            var newModel = Util.createModelInstance( modelConstructor, args || [] );
+            var newModel = createModelInstance( modelConstructor, args || [] );
             
             for( var p in this.$result[i] )
             {

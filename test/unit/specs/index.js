@@ -1,3 +1,6 @@
+// Integrations
+require( './integrations/MomentSpec.js' );
+
 // wheres
 require( './where/WhereSpec.js' );
 require( './where/WhereDateSpec.js' );
@@ -11,10 +14,10 @@ require( './order/OrderBySpec.js' );
 require( './order/OrderByDateSpec.js' );
 
 // util
-require( './util/QueryResolverSpec.js' );
+require( './util/QuerySpec.js' );
+require( './util/CrawlerSpec.js' );
 require( './util/CollectionSpec.js' );
 require( './util/PaginatorSpec.js' );
-require( './util/UtilSpec.js' );
 
 // Builder
 require( './BuilderSpec.js' );

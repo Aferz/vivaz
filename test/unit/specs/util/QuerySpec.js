@@ -1,7 +1,7 @@
 import Builder from '../../../../src/Builder';
-import QueryResolver from '../../../../src/util/QueryResolver';
+import Query from '../../../../src/util/Query';
 
-describe( 'QueryResolver', function()
+describe( 'Query', function()
 {
     var builder = function( data )
     {
@@ -14,11 +14,11 @@ describe( 'QueryResolver', function()
         var user2 = { id: 2, name: 'Tamara' };
         var users = [ user1, user2 ];
 
-        var b = QueryResolver.resolve.call( builder( users ).where( 'id', 1 ) );
+        var b = Query.resolve( builder( users ).where( 'id', 1 ) );
         expect( b.$result.length ).toBe( 1 );
         expect( b.$result ).toEqual( [ user1 ] );
         
-        var b = QueryResolver.resolve.call( builder( users ).where( 'id', 1 ).orWhere( 'id', 2 ) );
+        var b = Query.resolve( builder( users ).where( 'id', 1 ).orWhere( 'id', 2 ) );
         expect( b.$result.length ).toBe( 2 );
         expect( b.$result ).toEqual( users );
     } );
@@ -30,7 +30,7 @@ describe( 'QueryResolver', function()
         var user3 = { id: 3, name: 'Josh', car: { brand: 'Audi' } };
         var users = [ user1, user2, user3 ];
 
-        var b = QueryResolver.resolve.call( builder( users ).orderBy( 'name', 'desc' ) );
+        var b = Query.resolve( builder( users ).orderBy( 'name', 'desc' ) );
         expect( Array.isArray( b.$result ) ).toBeTruthy();
         expect( b.$result ).toEqual( [ user2, user3, user1 ] );
     } );
@@ -42,15 +42,15 @@ describe( 'QueryResolver', function()
         var user3 = { id: 3, name: 'Josh', car: { brand: 'Audi' } };
         var users = [ user1, user2, user3 ];
 
-        var b = QueryResolver.resolve.call( builder( users ).groupBy( 'id' ) );
+        var b = Query.resolve( builder( users ).groupBy( 'id' ) );
         expect( Array.isArray( b.$result ) ).toBeFalsy();
         expect( b.$result ).toEqual( { 1: [ user1 ], 2: [ user2 ], 3: [ user3 ] } );
 
-        var b = QueryResolver.resolve.call( builder( users ).groupBy( 'id', 'name' ) );
+        var b = Query.resolve( builder( users ).groupBy( 'id', 'name' ) );
         expect( Array.isArray( b.$result ) ).toBeFalsy();
         expect( b.$result ).toEqual( { 1: { 'Alex': [ user1 ] }, 2: { 'Tamara' : [ user2 ] }, 3: { 'Josh': [ user3 ] } } );
 
-        var b = QueryResolver.resolve.call( builder( users ).groupBy( 'car.brand' ) );
+        var b = Query.resolve( builder( users ).groupBy( 'car.brand' ) );
         expect( b.$result ).toEqual( { 'Hyundai': [ user1 ], 'Audi' : [ user2, user3 ] } );
     } );
 
@@ -61,11 +61,11 @@ describe( 'QueryResolver', function()
         var user3 = { id: 3, name: 'Josh', car: { brand: 'Audi' } };
         var users = [ user1, user2, user3 ];
 
-        var b = QueryResolver.resolve.call( builder( users ).select( 'id' ) );
+        var b = Query.resolve( builder( users ).select( 'id' ) );
         expect( Array.isArray( b.$result ) ).toBeTruthy();
         expect( b.$result ).toEqual( [ { id: 1 }, { id: 2 }, { id: 3 } ] );
 
-        var b = QueryResolver.resolve.call( builder( users ).select( 'id', 'car.brand' ) );
+        var b = Query.resolve( builder( users ).select( 'id', 'car.brand' ) );
         expect( Array.isArray( b.$result ) ).toBeTruthy();
         expect( b.$result ).toEqual( [ { id: 1, car: { brand: 'Hyundai' } }, { id: 2, car: { brand: 'Audi' } }, { id: 3, car: { brand: 'Audi' } } ] );
     } );

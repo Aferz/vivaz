@@ -18,7 +18,7 @@ then
 
     # Build & Bump
     echo "Bumping main file and building minified / common file ..."
-    VERSION=$VERSION npm run build
+    VERSION=$VERSION ENV=production npm run build
     echo "Done."
 
     # Commit

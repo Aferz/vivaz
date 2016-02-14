@@ -4,6 +4,7 @@ var rollup  = require( 'rollup' );
 var uglify  = require( 'uglify-js' );
 var babel   = require( 'rollup-plugin-babel' );
 var version = process.env.VERSION || require( '../package.json' ).version;
+var env     = process.env.ENV || 'development';
 
 var banner =
     '/*!\n' +
@@ -12,9 +13,11 @@ var banner =
     ' * Released under the MIT License.\n' +
     ' */';
     
+// Replace main file
 var main = fs
     .readFileSync( 'src/Vivaz.js', 'utf-8' )
-    .replace( /Vivaz\._version = '[\d\.]+'/, "Vivaz._version = '" + version + "'" );
+    .replace( /Vivaz\._version = '[\d\.]+'/, "Vivaz._version = '" + version + "'" )
+    .replace( /Vivaz\._env = '[\d\.]+'/, "Vivaz._env = '" + env + "'" );
 
 fs.writeFileSync( 'src/Vivaz.js', main );
 

@@ -1,4 +1,4 @@
-import Util from './Util';
+import Crawler from './Crawler';
 
 export default function Collection( data )
 {
@@ -31,7 +31,7 @@ Collection.prototype = {
         {
             for( var i = 0; i < this.$data.length; i++ )
             {
-                var currentVal = Util.selectNestedObject( this.$data[i], field );
+                var currentVal = Crawler.selectNestedObject( this.$data[i], field );
                 
                 if( JSON.stringify( currentVal ) === JSON.stringify( value ) )
                 {
@@ -43,7 +43,7 @@ Collection.prototype = {
         {
             for( var i = 0; i < this.$data.length; i++ )
             {
-                var currentVal = Util.selectNestedObject( this.$data[i], field );
+                var currentVal = Crawler.selectNestedObject( this.$data[i], field );
                 
                 if( strict === true && currentVal === value )
                 {
@@ -111,7 +111,7 @@ Collection.prototype = {
 
         for( var i = 0; i < this.$data.length; i++ )
         {
-            var currentVal = Util.selectNestedObject( this.$data[i], field );
+            var currentVal = Crawler.selectNestedObject( this.$data[i], field );
 
             if( isNaN( currentVal ) )
             {
@@ -135,7 +135,7 @@ Collection.prototype = {
 
         for( var i = 0; i < this.$data.length; i++ )
         {
-            var currentVal = new Date( Util.selectNestedObject( this.$data[i], field ) );
+            var currentVal = new Date( Crawler.selectNestedObject( this.$data[i], field ) );
 
             if( currentVal == 'Invalid Date' )
             {
@@ -159,7 +159,7 @@ Collection.prototype = {
 
         for( var i = 0; i < this.$data.length; i++ )
         {
-            var currentVal = Util.selectNestedObject( this.$data[i], field );
+            var currentVal = Crawler.selectNestedObject( this.$data[i], field );
 
             if( isNaN( currentVal ) )
             {
@@ -183,7 +183,7 @@ Collection.prototype = {
 
         for( var i = 0; i < this.$data.length; i++ )
         {
-            var currentVal = new Date( Util.selectNestedObject( this.$data[i], field ) );
+            var currentVal = new Date( Crawler.selectNestedObject( this.$data[i], field ) );
 
             if( currentVal == 'Invalid Date' )
             {
@@ -202,7 +202,7 @@ Collection.prototype = {
 
         for( var i = 0; i < this.$data.length; i++ )
         {
-            var currentVal = Util.selectNestedObject( this.$data[i], field );
+            var currentVal = Crawler.selectNestedObject( this.$data[i], field );
             
             if( currentVal !== undefined )
             {
@@ -229,7 +229,7 @@ Collection.prototype = {
 
         for( var i = 0; i < this.$data.length; i++ )
         {
-            var currentValue = Util.selectNestedObject( this.$data[i], field );
+            var currentValue = Crawler.selectNestedObject( this.$data[i], field );
 
             if( strict === true && value === currentValue )
             {
@@ -253,8 +253,8 @@ Collection.prototype = {
     {
         this.$data.sort( function( a, b )
         {
-            var result = Util.selectNestedObject( a, field ) > Util.selectNestedObject( b, field ) ? 1 :
-                         Util.selectNestedObject( a, field ) < Util.selectNestedObject( b, field ) ? -1 :
+            var result = Crawler.selectNestedObject( a, field ) > Crawler.selectNestedObject( b, field ) ? 1 :
+                         Crawler.selectNestedObject( a, field ) < Crawler.selectNestedObject( b, field ) ? -1 :
                          0;
 
             return order ? -result : result;
@@ -319,7 +319,7 @@ Collection.prototype = {
 
         for( var i = 0; i < this.$data.length; i++ )
         {
-            var currentVal = Util.selectNestedObject( this.$data[i], field );
+            var currentVal = Crawler.selectNestedObject( this.$data[i], field );
 
             if( isNaN( currentVal ) )
             {
@@ -350,12 +350,12 @@ Collection.prototype = {
             {
                 if( index[i] >= this.$data.length ) continue;
 
-                Util.setNestedObjectValue( this.$data[ index[i] ], field, value );
+                Crawler.setNestedObjectValue( this.$data[ index[i] ], field, value );
             }
         }
         else if( index < this.$data.length )
         {
-            Util.setNestedObjectValue( this.$data[ index ], field, value );
+            Crawler.setNestedObjectValue( this.$data[ index ], field, value );
         }
 
         return this;
