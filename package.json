@@ -1,7 +1,7 @@
 {
   "name": "vivaz",
   "author": "Alejandro Fernandez Rueda",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Elegant syntax, dead-simple and yet powerful query builder for javascript.",
   "main": "./dist/vivaz.common.js",
   "directories": {
