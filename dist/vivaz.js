@@ -1,5 +1,5 @@
 /*!
- * Vivaz.js v0.1.0
+ * Vivaz.js v0.1.1
  * (c) 2016 Alejandro Fernandez
  * Released under the MIT License.
  */
