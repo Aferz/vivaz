@@ -1,5 +1,5 @@
 /*!
- * Vivaz.js v0.1.1
+ * Vivaz.js v0.1.2
  * (c) 2016 Alejandro Fernandez
  * Released under the MIT License.
  */
@@ -1343,6 +1343,6 @@ function Vivaz(data) {
 	return new Builder(data);
 }
 
-Vivaz._version = '0.1.0';
+Vivaz._version = '0.1.2';
 
 module.exports = Vivaz;
