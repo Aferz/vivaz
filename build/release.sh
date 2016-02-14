@@ -25,7 +25,7 @@ then
     echo "Commiting and bumping package.json ..."
     git add -A
     git commit -m "Build v$VERSION"
-    npm version $VERSION --message "Build v$VERSION"
+    npm version $VERSION --message "Release v$VERSION"
     echo "Done."
 
     # Publish
