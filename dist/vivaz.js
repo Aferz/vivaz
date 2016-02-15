@@ -59,7 +59,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.default = Vivaz;
 
 	var _Builder = __webpack_require__(1);
 
@@ -69,10 +68,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Config2 = _interopRequireDefault(_Config);
 
+	var _Bootstrap = __webpack_require__(17);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function Vivaz(data, config) {
-	    var cfg = _initConfig(config || {});
+	    var cfg = (0, _Bootstrap.overrideConfig)(config || {});
 
 	    return new _Builder2.default(data, cfg);
 	}
@@ -81,19 +82,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	Vivaz._env = 'development';
 
-	Vivaz.config = _Config2.default;
+	(0, _Bootstrap.bootstrap)(Vivaz);
 
-	var _initConfig = function _initConfig(userConfig) {
-	    var cfg = {};
-
-	    // Default config
-	    for (var prop in _Config2.default) {
-	        cfg[prop] = _Config2.default[prop];
-	    } // User config
-	    for (var prop in userConfig) {
-	        cfg[prop] = userConfig[prop];
-	    }return cfg;
-	};
+	exports.default = Vivaz;
 
 /***/ },
 /* 1 */
@@ -113,47 +104,47 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Where2 = _interopRequireDefault(_Where);
 
-	var _WhereIn = __webpack_require__(4);
+	var _WhereIn = __webpack_require__(6);
 
 	var _WhereIn2 = _interopRequireDefault(_WhereIn);
 
-	var _WhereDate = __webpack_require__(5);
+	var _WhereDate = __webpack_require__(7);
 
 	var _WhereDate2 = _interopRequireDefault(_WhereDate);
 
-	var _WhereLike = __webpack_require__(6);
+	var _WhereLike = __webpack_require__(8);
 
 	var _WhereLike2 = _interopRequireDefault(_WhereLike);
 
-	var _WhereCount = __webpack_require__(7);
+	var _WhereCount = __webpack_require__(9);
 
 	var _WhereCount2 = _interopRequireDefault(_WhereCount);
 
-	var _WhereBetween = __webpack_require__(8);
+	var _WhereBetween = __webpack_require__(10);
 
 	var _WhereBetween2 = _interopRequireDefault(_WhereBetween);
 
-	var _OrderBy = __webpack_require__(9);
+	var _OrderBy = __webpack_require__(11);
 
 	var _OrderBy2 = _interopRequireDefault(_OrderBy);
 
-	var _OrderByDate = __webpack_require__(10);
+	var _OrderByDate = __webpack_require__(12);
 
 	var _OrderByDate2 = _interopRequireDefault(_OrderByDate);
 
-	var _Query = __webpack_require__(17);
+	var _Query = __webpack_require__(13);
 
 	var _Query2 = _interopRequireDefault(_Query);
 
-	var _Crawler = __webpack_require__(16);
+	var _Crawler = __webpack_require__(14);
 
 	var _Crawler2 = _interopRequireDefault(_Crawler);
 
-	var _Paginator = __webpack_require__(12);
+	var _Paginator = __webpack_require__(15);
 
 	var _Paginator2 = _interopRequireDefault(_Paginator);
 
-	var _Collection = __webpack_require__(13);
+	var _Collection = __webpack_require__(16);
 
 	var _Collection2 = _interopRequireDefault(_Collection);
 
@@ -665,32 +656,51 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 
-	var _Environment = __webpack_require__(18);
+	var _Environment = __webpack_require__(4);
 
-	var _Environment2 = _interopRequireDefault(_Environment);
-
-	var _Constants = __webpack_require__(19);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _Constants = __webpack_require__(5);
 
 	var Config = {
 
 	    integrations: {
 	        moment: {
 	            active: false,
-	            nodehook: null // Only for node. moment function hook.
+	            factory: undefined
 	        }
 	    },
 
 	    validOperators: ['=', '===', '!=', '!==', '<', '<=', '>=', '>', '<>'],
 
-	    runningPlatform: _Environment2.default ? _Constants.PLATFORM_BROWSER : _Constants.PLATFORM_NODE
+	    runningPlatform: _Environment.isBrowser ? _Constants.PLATFORM_BROWSER : _Constants.PLATFORM_NODE
 	};
 
 	exports.default = Config;
 
 /***/ },
 /* 4 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var isBrowser = exports.isBrowser = typeof window !== 'undefined' && Object.prototype.toString.call(window) !== '[object Object]';
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var PLATFORM_NODE = exports.PLATFORM_NODE = 'nodejs';
+	var PLATFORM_BROWSER = exports.PLATFORM_BROWSER = 'browser';
+
+/***/ },
+/* 6 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -739,7 +749,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 5 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -820,7 +830,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 6 */
+/* 8 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -865,7 +875,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 7 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -935,7 +945,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 8 */
+/* 10 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -999,7 +1009,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 9 */
+/* 11 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1040,7 +1050,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 10 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1050,7 +1060,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.default = OrderByDate;
 
-	var _OrderBy = __webpack_require__(9);
+	var _OrderBy = __webpack_require__(11);
 
 	var _OrderBy2 = _interopRequireDefault(_OrderBy);
 
@@ -1084,8 +1094,234 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 11 */,
-/* 12 */
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _Crawler = __webpack_require__(14);
+
+	var _Crawler2 = _interopRequireDefault(_Crawler);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Query = Object.create({
+
+	    resolve: function resolve(builder) {
+	        this.doWhere(builder);
+	        this.doOrderBy(builder);
+	        this.doGroupBy(builder);
+	        this.doSelect(builder);
+
+	        return builder;
+	    },
+
+	    doWhere: function doWhere(builder) {
+	        if (builder.$where.and.length + builder.$where.or.length > 0) {
+	            builder.$result = builder.$result.filter(function (element) {
+	                var passed = false;
+
+	                for (var i = 0; i < builder.$where.and.length; i++) {
+	                    var where = builder.$where.and[i];
+
+	                    var elementValue = _Crawler2.default.selectNestedObject(element, where.field);
+
+	                    passed = where.resolve(elementValue);
+
+	                    if (!passed) {
+	                        passed = false;
+
+	                        break;
+	                    }
+	                }
+
+	                if (!passed) {
+	                    for (var i = 0; i < builder.$where.or.length; i++) {
+	                        var where = builder.$where.or[i];
+
+	                        var elementValue = _Crawler2.default.selectNestedObject(element, where.field);
+
+	                        passed = where.resolve(elementValue);
+
+	                        if (passed) {
+	                            passed = true;
+
+	                            break;
+	                        }
+	                    }
+	                }
+
+	                return passed;
+	            }.bind(builder));
+	        }
+
+	        return builder;
+	    },
+
+	    doOrderBy: function doOrderBy(builder) {
+	        if (builder.$orderBy.length > 0) {
+	            builder.$result.sort(function (a, b) {
+	                for (var i = 0; i < builder.$orderBy.length; i++) {
+	                    var retval = builder.$orderBy[i].resolve(a, b);
+
+	                    if (retval !== 0) {
+	                        return retval;
+	                    }
+	                }
+	            }.bind(builder));
+	        }
+
+	        return builder;
+	    },
+
+	    doGroupBy: function doGroupBy(builder) {
+	        if (builder.$groupBy.length > 0) {
+	            var groupedElement = {};
+
+	            builder.$result.map(function (element) {
+	                groupedElement = _Crawler2.default.createGroupsRecursively(builder.$groupBy, element, 0, groupedElement);
+	            }.bind(builder));
+
+	            builder.$result = groupedElement;
+	        }
+
+	        return builder;
+	    },
+
+	    doSelect: function doSelect(builder) {
+	        if (builder.$select == '*') {
+	            return builder;
+	        }
+
+	        var elementResult = [];
+
+	        if (builder.$groupBy.length > 0) {
+	            builder.$result = [builder.$result];
+	        }
+
+	        builder.$result.map(function (element) {
+	            var newElement = {};
+
+	            for (var i in builder.$select) {
+	                _Crawler2.default.createNestedObject(newElement, builder.$select[i], _Crawler2.default.selectNestedObject(element, builder.$select[i]));
+	            }
+
+	            elementResult.push(newElement);
+	        }.bind(builder));
+
+	        builder.$result = builder.$groupBy.length ? elementResult[0] : elementResult;
+
+	        return builder;
+	    }
+
+	});
+
+	exports.default = Query;
+
+/***/ },
+/* 14 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	var Crawler = Object.create({
+
+	    createGroupsRecursively: function createGroupsRecursively(groups, element, groupLevel, groupedElement) {
+	        if (arguments.length == 2) {
+	            groupLevel = 0;
+	            groupedElement = {};
+	        }
+
+	        var value = this.selectNestedObject(element, groups[groupLevel]);
+
+	        if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
+	            throw 'You can\'t group by an object or array.';
+	        }
+
+	        if (groups[groupLevel + 1] === undefined) {
+	            if (!groupedElement.hasOwnProperty(value)) {
+	                groupedElement[value] = [];
+	            }
+
+	            groupedElement[value].push(element);
+	        } else {
+	            if (!groupedElement.hasOwnProperty(value)) {
+	                groupedElement[value] = this.createGroupsRecursively(groups, element, ++groupLevel, {});
+	            } else {
+	                groupedElement[value] = this.createGroupsRecursively(groups, element, ++groupLevel, groupedElement[value]);
+	            }
+	        }
+
+	        return groupedElement;
+	    },
+
+	    createNestedObject: function createNestedObject(element, keys, value) {
+	        if (!Array.isArray(keys)) {
+	            keys = this.splitNestedField(keys);
+	        }
+
+	        if (keys.length === 1) {
+	            element[keys[0]] = value;
+	        } else {
+	            var key = keys.shift();
+
+	            element[key] = this.createNestedObject(typeof element[key] === 'undefined' ? {} : element[key], keys, value);
+	        }
+
+	        return element;
+	    },
+
+	    selectNestedObject: function selectNestedObject(element, keys, parentKey, value) {
+	        if (!Array.isArray(keys)) {
+	            keys = this.splitNestedField(keys);
+	        }
+
+	        if (keys.length === 1) {
+	            if (!value) {
+	                return element[keys[0]];
+	            }
+
+	            element[keys[0]] = value;
+	            return;
+	        } else {
+	            var key = keys.shift();
+
+	            if (!element[key]) {
+	                throw 'Child "' + key + '" not found in "' + parentKey + '".';
+	            } else if (element[key] && _typeof(element[key]) == 'object') {
+	                return this.selectNestedObject(element[key], keys, key, value);
+	            }
+
+	            throw 'Child "' + keys.shift() + '" not found in "' + key + '" child, because it\'s not an object.';
+	        }
+	    },
+
+	    setNestedObjectValue: function setNestedObjectValue(element, keys, value) {
+	        this.selectNestedObject(element, keys, undefined, value);
+
+	        return element;
+	    },
+
+	    splitNestedField: function splitNestedField(field) {
+	        return field.indexOf('.') > -1 ? field.split('.') : [field];
+	    }
+
+	});
+
+	exports.default = Crawler;
+
+/***/ },
+/* 15 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1154,7 +1390,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 13 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1167,7 +1403,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = Collection;
 
-	var _Crawler = __webpack_require__(16);
+	var _Crawler = __webpack_require__(14);
 
 	var _Crawler2 = _interopRequireDefault(_Crawler);
 
@@ -1465,256 +1701,94 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 14 */,
-/* 15 */,
-/* 16 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var Crawler = Object.create({
-
-	    createGroupsRecursively: function createGroupsRecursively(groups, element, groupLevel, groupedElement) {
-	        if (arguments.length == 2) {
-	            groupLevel = 0;
-	            groupedElement = {};
-	        }
-
-	        var value = this.selectNestedObject(element, groups[groupLevel]);
-
-	        if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
-	            throw 'You can\'t group by an object or array.';
-	        }
-
-	        if (groups[groupLevel + 1] === undefined) {
-	            if (!groupedElement.hasOwnProperty(value)) {
-	                groupedElement[value] = [];
-	            }
-
-	            groupedElement[value].push(element);
-	        } else {
-	            if (!groupedElement.hasOwnProperty(value)) {
-	                groupedElement[value] = this.createGroupsRecursively(groups, element, ++groupLevel, {});
-	            } else {
-	                groupedElement[value] = this.createGroupsRecursively(groups, element, ++groupLevel, groupedElement[value]);
-	            }
-	        }
-
-	        return groupedElement;
-	    },
-
-	    createNestedObject: function createNestedObject(element, keys, value) {
-	        if (!Array.isArray(keys)) {
-	            keys = this.splitNestedField(keys);
-	        }
-
-	        if (keys.length === 1) {
-	            element[keys[0]] = value;
-	        } else {
-	            var key = keys.shift();
-
-	            element[key] = this.createNestedObject(typeof element[key] === 'undefined' ? {} : element[key], keys, value);
-	        }
-
-	        return element;
-	    },
-
-	    selectNestedObject: function selectNestedObject(element, keys, parentKey, value) {
-	        if (!Array.isArray(keys)) {
-	            keys = this.splitNestedField(keys);
-	        }
-
-	        if (keys.length === 1) {
-	            if (!value) {
-	                return element[keys[0]];
-	            }
-
-	            element[keys[0]] = value;
-	            return;
-	        } else {
-	            var key = keys.shift();
-
-	            if (!element[key]) {
-	                throw 'Child "' + key + '" not found in "' + parentKey + '".';
-	            } else if (element[key] && _typeof(element[key]) == 'object') {
-	                return this.selectNestedObject(element[key], keys, key, value);
-	            }
-
-	            throw 'Child "' + keys.shift() + '" not found in "' + key + '" child, because it\'s not an object.';
-	        }
-	    },
-
-	    setNestedObjectValue: function setNestedObjectValue(element, keys, value) {
-	        this.selectNestedObject(element, keys, undefined, value);
-
-	        return element;
-	    },
-
-	    splitNestedField: function splitNestedField(field) {
-	        return field.indexOf('.') > -1 ? field.split('.') : [field];
-	    }
-
-	});
-
-	exports.default = Crawler;
-
-/***/ },
 /* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
+	exports.bootstrap = bootstrap;
+	exports.overrideConfig = overrideConfig;
 
-	var _Crawler = __webpack_require__(16);
+	var _Config = __webpack_require__(3);
 
-	var _Crawler2 = _interopRequireDefault(_Crawler);
+	var _Config2 = _interopRequireDefault(_Config);
+
+	var _Moment = __webpack_require__(18);
+
+	var _Moment2 = _interopRequireDefault(_Moment);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var Query = Object.create({
+	function bootstrap(Vivaz) {
+	  __initConfig(Vivaz);
+	  __initIntegrations(Vivaz);
+	}
 
-	    resolve: function resolve(builder) {
-	        this.doWhere(builder);
-	        this.doOrderBy(builder);
-	        this.doGroupBy(builder);
-	        this.doSelect(builder);
+	function overrideConfig(userConfig) {
+	  var cfg = {};
 
-	        return builder;
-	    },
+	  // Default config
+	  for (var prop in _Config2.default) {
+	    cfg[prop] = _Config2.default[prop];
+	  } // User config
+	  for (var prop in userConfig) {
+	    cfg[prop] = userConfig[prop];
+	  }return cfg;
+	}
 
-	    doWhere: function doWhere(builder) {
-	        if (builder.$where.and.length + builder.$where.or.length > 0) {
-	            builder.$result = builder.$result.filter(function (element) {
-	                var passed = false;
+	var __initConfig = function __initConfig(Vivaz) {
+	  Vivaz.config = _Config2.default;
+	};
 
-	                for (var i = 0; i < builder.$where.and.length; i++) {
-	                    var where = builder.$where.and[i];
-
-	                    var elementValue = _Crawler2.default.selectNestedObject(element, where.field);
-
-	                    passed = where.resolve(elementValue);
-
-	                    if (!passed) {
-	                        passed = false;
-
-	                        break;
-	                    }
-	                }
-
-	                if (!passed) {
-	                    for (var i = 0; i < builder.$where.or.length; i++) {
-	                        var where = builder.$where.or[i];
-
-	                        var elementValue = _Crawler2.default.selectNestedObject(element, where.field);
-
-	                        passed = where.resolve(elementValue);
-
-	                        if (passed) {
-	                            passed = true;
-
-	                            break;
-	                        }
-	                    }
-	                }
-
-	                return passed;
-	            }.bind(builder));
-	        }
-
-	        return builder;
-	    },
-
-	    doOrderBy: function doOrderBy(builder) {
-	        if (builder.$orderBy.length > 0) {
-	            builder.$result.sort(function (a, b) {
-	                for (var i = 0; i < builder.$orderBy.length; i++) {
-	                    var retval = builder.$orderBy[i].resolve(a, b);
-
-	                    if (retval !== 0) {
-	                        return retval;
-	                    }
-	                }
-	            }.bind(builder));
-	        }
-
-	        return builder;
-	    },
-
-	    doGroupBy: function doGroupBy(builder) {
-	        if (builder.$groupBy.length > 0) {
-	            var groupedElement = {};
-
-	            builder.$result.map(function (element) {
-	                groupedElement = _Crawler2.default.createGroupsRecursively(builder.$groupBy, element, 0, groupedElement);
-	            }.bind(builder));
-
-	            builder.$result = groupedElement;
-	        }
-
-	        return builder;
-	    },
-
-	    doSelect: function doSelect(builder) {
-	        if (builder.$select == '*') {
-	            return builder;
-	        }
-
-	        var elementResult = [];
-
-	        if (builder.$groupBy.length > 0) {
-	            builder.$result = [builder.$result];
-	        }
-
-	        builder.$result.map(function (element) {
-	            var newElement = {};
-
-	            for (var i in builder.$select) {
-	                _Crawler2.default.createNestedObject(newElement, builder.$select[i], _Crawler2.default.selectNestedObject(element, builder.$select[i]));
-	            }
-
-	            elementResult.push(newElement);
-	        }.bind(builder));
-
-	        builder.$result = builder.$groupBy.length ? elementResult[0] : elementResult;
-
-	        return builder;
-	    }
-
-	});
-
-	exports.default = Query;
+	var __initIntegrations = function __initIntegrations(Vivaz) {
+	  (0, _Moment2.default)(Vivaz);
+	};
 
 /***/ },
 /* 18 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var isBrowser = exports.isBrowser = typeof window !== 'undefined' && Object.prototype.toString.call(window) !== '[object Object]';
-
-/***/ },
-/* 19 */
-/***/ function(module, exports) {
-
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+		value: true
 	});
-	var PLATFORM_NODE = exports.PLATFORM_NODE = 'nodejs';
-	var PLATFORM_BROWSER = exports.PLATFORM_BROWSER = 'browser';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	exports.default = function (Vivaz) {
+		// Trying to get moment from browser window object
+		if (_Environment2.default && _typeof(window.moment) !== undefined) {
+			Vivaz.config.integrations = {
+				moment: {
+					active: true,
+					factory: window.moment
+				}
+			};
+		}
+
+		// Trying to get moment from node global object
+		else if (_typeof(global.moment) !== undefined) {
+				Vivaz.config.integrations = {
+					moment: {
+						active: true,
+						factory: global.moment
+					}
+				};
+			}
+
+		// else, it must to be defined manually
+	};
+
+	var _Environment = __webpack_require__(4);
+
+	var _Environment2 = _interopRequireDefault(_Environment);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ }
 /******/ ])

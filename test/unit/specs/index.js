@@ -21,3 +21,6 @@ require( './util/PaginatorSpec.js' );
 
 // Builder
 require( './BuilderSpec.js' );
+
+// Vivaz
+require( './VivazSpec.js' );

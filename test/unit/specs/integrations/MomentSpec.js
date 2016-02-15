@@ -1,4 +1,5 @@
 import Vivaz from '../../../../src/Vivaz';
+import { isBrowser } from '../../../../src/util/Environment';
 
 describe( 'Integrations - MomentJS', function()
 {
@@ -7,13 +8,11 @@ describe( 'Integrations - MomentJS', function()
         { id: 2, name: 'Tamara', birthdate: '1991-06-19' }
     ];
     
-    it( 'Integration in browser', function()
+    if( isBrowser && window.moment != undefined )
     {
-        console.log( Vivaz( { id: 1 } ) );
-        //var g = typeof window === undefined ? global : window; // Node or Browser
-        
-        //g.moment = require( 'moment' );
-        
-        //expect( typeof global.moment === 'function' ).toBeTruthy();
-    } );
+        it( 'Detects momentjs on browser and injects into Vivaz', function()
+        {
+            
+        } );
+    }
 } );

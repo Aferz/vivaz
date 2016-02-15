@@ -37,11 +37,10 @@ describe( 'Builder', function()
         expect( b.$where ).toEqual( { and: [], or: [] } );
         expect( b.$groupBy ).toEqual( [] );
         expect( b.$orderBy ).toEqual( [] );
-    } );
-    
-    it( 'Builder configuration', function()
-    {
-        
+
+        // With configuration
+        var b = new Builder( { id: 1, name: 'Alex' }, { value1: 'value1' } );
+        expect( b.$config.value1 ).toBe( 'value1' );
     } );
 
     it( 'Clean', function()

@@ -1,4 +1,4 @@
-import isBrowser from '../util/Environment';
+import { isBrowser } from '../util/Environment';
 import { PLATFORM_NODE, PLATFORM_BROWSER } from './Constants';
 
 const Config = {
@@ -6,7 +6,7 @@ const Config = {
     integrations: {
         moment: {
             active: false,
-            nodehook: null // Only for node. moment function hook.
+            factory: undefined,
         }
     },
     
