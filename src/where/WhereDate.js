@@ -1,4 +1,5 @@
 import Where from './Where';
+import Config from '../config/Config';
 
 export default function WhereDate( field, operator, value, $not )
 {
@@ -9,6 +10,9 @@ export default function WhereDate( field, operator, value, $not )
     this.operator = operator;
     this.value    = value;
 
+    // momentjs integration
+    this.valueIsMomentObject = false;
+
     this.resolveArguments().resolveValue();
 }
 
@@ -18,6 +22,15 @@ WhereDate.prototype.constructor = WhereDate;
 
 WhereDate.prototype.resolveValue = function()
 {
+    // Moment.js validation
+    if( typeof this.value == 'object' && Config.integrations.moment.active === true && 
+        this.value.hasOwnProperty( '_isAMomentObject' ) && this.value[ '_isAMomentObject' ] === true )
+    {
+        this.valueIsMomentObject = true;
+
+        return this;
+    }
+
     var date = new Date( this.value );
     
     if( date == 'Invalid Date' || this.value === null || this.value === undefined )
@@ -32,22 +45,31 @@ WhereDate.prototype.resolveValue = function()
 
 WhereDate.prototype.resolve = function( elementValue )
 {
-    var dateValue = new Date( elementValue );
+    if( this.valueIsMomentObject )
+    {
+        var dateValue = this.value._isUTC ? 
+            Config.integrations.moment.factory.utc( elementValue ) : 
+            Config.integrations.moment.factory( elementValue );
+    }
+    else
+    {
+        var dateValue = new Date( elementValue );
+    }
     
-    if( dateValue == 'Invalid Date' )
+    if( dateValue.toString() == 'Invalid Date' )
     {
         throw 'Invalid date "' + elementValue + '" in field "' + this.field + '".';
     }
-
+    
     switch( this.operator )
     {
         case '=':
-            var result = dateValue.toString() == this.value.toString();
+            var result = dateValue.toISOString() == this.value.toISOString();
             break;
             
         case '!=':
         case '<>':
-            var result = dateValue.toString() != this.value.toString();
+            var result = dateValue.toISOString() != this.value.toISOString();
             break;
         
         case '<=':

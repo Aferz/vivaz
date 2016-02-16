@@ -66,14 +66,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Config = __webpack_require__(3);
 
-	var _Config2 = _interopRequireDefault(_Config);
-
-	var _Bootstrap = __webpack_require__(17);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function Vivaz(data, config) {
-	    var cfg = (0, _Bootstrap.overrideConfig)(config || {});
+	    var cfg = (0, _Config.overrideConfig)(config || {});
 
 	    return new _Builder2.default(data, cfg);
 	}
@@ -81,8 +77,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	Vivaz._version = '0.1.2';
 
 	Vivaz._env = 'development';
-
-	(0, _Bootstrap.bootstrap)(Vivaz);
 
 	exports.default = Vivaz;
 
@@ -655,6 +649,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.overrideConfig = overrideConfig;
 
 	var _Environment = __webpack_require__(4);
 
@@ -662,10 +657,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var Config = {
 
+	    debug: false,
+
+	    dateFields: [],
+
+	    dateAsObjects: true,
+
 	    integrations: {
 	        moment: {
 	            active: false,
-	            factory: undefined
+	            factory: null
 	        }
 	    },
 
@@ -675,6 +676,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	exports.default = Config;
+	function overrideConfig(userConfig) {
+	    var cfg = {};
+
+	    // Default config
+	    for (var prop in Config) {
+	        cfg[prop] = Config[prop];
+	    } // User config
+	    for (var prop in userConfig) {
+	        cfg[prop] = userConfig[prop];
+	    }return cfg;
+	}
 
 /***/ },
 /* 4 */
@@ -757,11 +769,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 	exports.default = WhereDate;
 
 	var _Where = __webpack_require__(2);
 
 	var _Where2 = _interopRequireDefault(_Where);
+
+	var _Config = __webpack_require__(3);
+
+	var _Config2 = _interopRequireDefault(_Config);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -773,6 +792,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.operator = operator;
 	    this.value = value;
 
+	    // momentjs integration
+	    this.valueIsMomentObject = false;
+
 	    this.resolveArguments().resolveValue();
 	}
 
@@ -781,6 +803,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	WhereDate.prototype.constructor = WhereDate;
 
 	WhereDate.prototype.resolveValue = function () {
+	    // Moment.js validation
+	    if (_typeof(this.value) == 'object' && _Config2.default.integrations.moment.active === true && this.value.hasOwnProperty('_isAMomentObject') && this.value['_isAMomentObject'] === true) {
+	        this.valueIsMomentObject = true;
+
+	        return this;
+	    }
+
 	    var date = new Date(this.value);
 
 	    if (date == 'Invalid Date' || this.value === null || this.value === undefined) {
@@ -793,20 +822,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	WhereDate.prototype.resolve = function (elementValue) {
-	    var dateValue = new Date(elementValue);
+	    if (this.valueIsMomentObject) {
+	        var dateValue = this.value._isUTC ? _Config2.default.integrations.moment.factory.utc(elementValue) : _Config2.default.integrations.moment.factory(elementValue);
+	    } else {
+	        var dateValue = new Date(elementValue);
+	    }
 
-	    if (dateValue == 'Invalid Date') {
+	    if (dateValue.toString() == 'Invalid Date') {
 	        throw 'Invalid date "' + elementValue + '" in field "' + this.field + '".';
 	    }
 
 	    switch (this.operator) {
 	        case '=':
-	            var result = dateValue.toString() == this.value.toString();
+	            var result = dateValue.toISOString() == this.value.toISOString();
 	            break;
 
 	        case '!=':
 	        case '<>':
-	            var result = dateValue.toString() != this.value.toString();
+	            var result = dateValue.toISOString() != this.value.toISOString();
 	            break;
 
 	        case '<=':
@@ -1699,96 +1732,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this.update(this.search(field, valueField), field, value);
 	    }
 	};
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.bootstrap = bootstrap;
-	exports.overrideConfig = overrideConfig;
-
-	var _Config = __webpack_require__(3);
-
-	var _Config2 = _interopRequireDefault(_Config);
-
-	var _Moment = __webpack_require__(18);
-
-	var _Moment2 = _interopRequireDefault(_Moment);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function bootstrap(Vivaz) {
-	  __initConfig(Vivaz);
-	  __initIntegrations(Vivaz);
-	}
-
-	function overrideConfig(userConfig) {
-	  var cfg = {};
-
-	  // Default config
-	  for (var prop in _Config2.default) {
-	    cfg[prop] = _Config2.default[prop];
-	  } // User config
-	  for (var prop in userConfig) {
-	    cfg[prop] = userConfig[prop];
-	  }return cfg;
-	}
-
-	var __initConfig = function __initConfig(Vivaz) {
-	  Vivaz.config = _Config2.default;
-	};
-
-	var __initIntegrations = function __initIntegrations(Vivaz) {
-	  (0, _Moment2.default)(Vivaz);
-	};
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	exports.default = function (Vivaz) {
-		// Trying to get moment from browser window object
-		if (_Environment2.default && _typeof(window.moment) !== undefined) {
-			Vivaz.config.integrations = {
-				moment: {
-					active: true,
-					factory: window.moment
-				}
-			};
-		}
-
-		// Trying to get moment from node global object
-		else if (_typeof(global.moment) !== undefined) {
-				Vivaz.config.integrations = {
-					moment: {
-						active: true,
-						factory: global.moment
-					}
-				};
-			}
-
-		// else, it must to be defined manually
-	};
-
-	var _Environment = __webpack_require__(4);
-
-	var _Environment2 = _interopRequireDefault(_Environment);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ }
 /******/ ])

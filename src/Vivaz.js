@@ -1,6 +1,5 @@
 import Builder from './Builder';
-import Config from './config/Config';
-import { bootstrap, overrideConfig } from './bootstrap/Bootstrap';
+import { overrideConfig } from './config/Config';
 
 function Vivaz( data, config )
 {
@@ -12,7 +11,5 @@ function Vivaz( data, config )
 Vivaz._version = '0.1.2';
 
 Vivaz._env = 'development';
-
-bootstrap( Vivaz );
 
 export default Vivaz;

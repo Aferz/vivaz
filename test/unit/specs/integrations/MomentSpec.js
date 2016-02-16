@@ -1,18 +1,44 @@
 import Vivaz from '../../../../src/Vivaz';
 import { isBrowser } from '../../../../src/util/Environment';
+import WhereDate from '../../../../src/where/WhereDate';
 
-describe( 'Integrations - MomentJS', function()
+describe( 'Integration - MomentJS', function()
 {
-    var data = [
-        { id: 1, name: 'Alex', birthdate: '1991-08-29' },
-        { id: 2, name: 'Tamara', birthdate: '1991-06-19' }
-    ];
-    
-    if( isBrowser && window.moment != undefined )
+    it( 'Integrates momentjs into Vivaz(Browser)', function()
     {
-        it( 'Detects momentjs on browser and injects into Vivaz', function()
-        {
-            
-        } );
-    }
+        expect( Vivaz.config.integrations.moment.active ).toBeTruthy();
+        expect( Vivaz.config.integrations.moment.factory ).toEqual( window.moment );
+    } );
+
+    it( 'WhereDate(included similars) accepts a moment object', function()
+    {
+        var w = new WhereDate( 'birthdate', moment( '1991-01-01' ) );
+        expect( w.value ).toEqual( moment( '1991-01-01' ) );
+    } );
+
+    it( 'WhereDate(included similars) resolves correctly a moment object', function()
+    {
+        var date = moment( '1991-08-29' );
+        expect( new WhereDate( 'birthdate', date ).resolve( '1991-08-29' ) ).toBeTruthy();
+    } );
+
+    it( 'WhereDate(included similars) resolves correctly a moment object(UTC)', function()
+    {
+        var date = moment.utc( '1991-08-29' );
+        expect( new WhereDate( 'birthdate', date ).resolve( '1991-08-29' ) ).toBeTruthy();
+    } );
+
+    it( 'WhereDate(included similars) resolves correctly a moment object(UTC)', function()
+    {
+        var date = moment.utc( '1991-08-29' );
+        expect( new WhereDate( 'birthdate', date ).resolve( '1991-08-29' ) ).toBeTruthy();
+    } );
+
+    it( 'Fetch data ', function()
+    {
+        var date = moment.utc( '1991-08-29' );
+        expect( new WhereDate( 'birthdate', date ).resolve( '1991-08-29' ) ).toBeTruthy();
+    } );
+
+    
 } );
