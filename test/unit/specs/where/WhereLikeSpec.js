@@ -17,15 +17,10 @@ describe( 'Where Like Clause', function()
         expect( w.not ).toBeFalsy();
         
         var w = new WhereLike( 'id', /expression/ );
-        expect( w.name ).toBe( 'whereLike' );
-        expect( w.field ).toBe( 'id' );
         expect( w.expression ).toEqual( /expression/ );
-        expect( w.not ).toBeFalsy();
 
         var w = new WhereLike( 'id', /expression/, true );
         expect( w.name ).toBe( 'whereNotLike' );
-        expect( w.field ).toBe( 'id' );
-        expect( w.expression ).toEqual( /expression/ );
         expect( w.not ).toBeTruthy();
     } );
 
@@ -33,14 +28,14 @@ describe( 'Where Like Clause', function()
     {
         var user = { id: 1, name: 'Alex' };
 
-        expect( new WhereLike( 'name', 'Alex' ).resolve( user.name ) ).toBeTruthy();
-        expect( new WhereLike( 'name', /le/ ).resolve( user.name ) ).toBeTruthy();
-        expect( new WhereLike( 'name', 'so' ).resolve( user.name ) ).toBeFalsy();
-        expect( new WhereLike( 'name', /so/ ).resolve( user.name ) ).toBeFalsy();
+        expect( new WhereLike( 'name', 'Alex' ).resolve( 'Alex' ) ).toBeTruthy();
+        expect( new WhereLike( 'name', /le/ ).resolve( 'Alex' ) ).toBeTruthy();
+        expect( new WhereLike( 'name', 'so' ).resolve( 'Alex' ) ).toBeFalsy();
+        expect( new WhereLike( 'name', /so/ ).resolve( 'Alex' ) ).toBeFalsy();
         
-        expect( new WhereLike( 'name', 'Alex', true ).resolve( user.name ) ).not.toBeTruthy();
-        expect( new WhereLike( 'name', /le/, true ).resolve( user.name ) ).not.toBeTruthy();
-        expect( new WhereLike( 'name', 'so', true ).resolve( user.name ) ).not.toBeFalsy();
-        expect( new WhereLike( 'name', /so/, true ).resolve( user.name ) ).not.toBeFalsy();
+        expect( new WhereLike( 'name', 'Alex', true ).resolve( 'Alex' ) ).not.toBeTruthy();
+        expect( new WhereLike( 'name', /le/, true ).resolve( 'Alex' ) ).not.toBeTruthy();
+        expect( new WhereLike( 'name', 'so', true ).resolve( 'Alex' ) ).not.toBeFalsy();
+        expect( new WhereLike( 'name', /so/, true ).resolve( 'Alex' ) ).not.toBeFalsy();
     } );
 } );

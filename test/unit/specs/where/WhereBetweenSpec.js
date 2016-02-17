@@ -31,20 +31,15 @@ describe( 'Where Between Clause', function()
         
         var w = new WhereBetween( 'id', 50, 100, true );
         expect( w.name ).toBe( 'whereNotBetween' );
-        expect( w.field ).toBe( 'id' );
-        expect( w.min ).toBe( 50 );
-        expect( w.max ).toBe( 100 );
         expect( w.not ).toBeTruthy();
     } );
 
     it( 'Resolves correctly', function()
     {
-        var user = { id: 1, name: 'Alex' };
-
-        expect( new WhereBetween( 'id', 1, 20 ).resolve( user.id ) ).toBeTruthy();
-        expect( new WhereBetween( 'id', 2, 20 ).resolve( user.id ) ).toBeFalsy();
+        expect( new WhereBetween( 'id', 1, 20 ).resolve( 1 ) ).toBeTruthy();
+        expect( new WhereBetween( 'id', 2, 20 ).resolve( 1 ) ).toBeFalsy();
         
-        expect( new WhereBetween( 'id', 1, 20, true ).resolve( user.id ) ).toBeFalsy();
-        expect( new WhereBetween( 'id', 2, 20, true ).resolve( user.id ) ).toBeTruthy();
+        expect( new WhereBetween( 'id', 1, 20, true ).resolve( 1 ) ).toBeFalsy();
+        expect( new WhereBetween( 'id', 2, 20, true ).resolve( 1 ) ).toBeTruthy();
     } );
 } );

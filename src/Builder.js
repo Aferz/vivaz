@@ -12,6 +12,7 @@ import Query from './util/Query';
 import Crawler from './util/Crawler';
 import Paginator from './util/Paginator';
 import Collection from './util/Collection';
+import Transformer from './util/Transformer';
 
 export default function Builder( data, cfg )
 {
@@ -20,7 +21,7 @@ export default function Builder( data, cfg )
         throw "No data supplied!";
     }
     
-    this.$config = cfg;
+    this.$config = cfg || {};
     
     this.$original = !Array.isArray( data ) ? [data] : data;
     
@@ -367,7 +368,14 @@ Builder.prototype = {
     {
         this.$result = this.$original;
 
-        return Query.resolve( this ).$result;
+        Query.resolve( this );
+
+        if( this.$config.datesAsObjects )
+        {
+            return Transformer.datesAsObjects( this.$result, this.$config.dateFields )
+        }
+
+        return this.$result;
     },
 
     first: function()

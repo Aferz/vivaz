@@ -64,7 +64,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Builder2 = _interopRequireDefault(_Builder);
 
-	var _Config = __webpack_require__(3);
+	var _Config = __webpack_require__(6);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -98,11 +98,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Where2 = _interopRequireDefault(_Where);
 
-	var _WhereIn = __webpack_require__(6);
+	var _WhereIn = __webpack_require__(4);
 
 	var _WhereIn2 = _interopRequireDefault(_WhereIn);
 
-	var _WhereDate = __webpack_require__(7);
+	var _WhereDate = __webpack_require__(5);
 
 	var _WhereDate2 = _interopRequireDefault(_WhereDate);
 
@@ -142,6 +142,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Collection2 = _interopRequireDefault(_Collection);
 
+	var _Transformer = __webpack_require__(17);
+
+	var _Transformer2 = _interopRequireDefault(_Transformer);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function Builder(data, cfg) {
@@ -149,7 +153,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        throw "No data supplied!";
 	    }
 
-	    this.$config = cfg;
+	    this.$config = cfg || {};
 
 	    this.$original = !Array.isArray(data) ? [data] : data;
 
@@ -434,7 +438,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    get: function get() {
 	        this.$result = this.$original;
 
-	        return _Query2.default.resolve(this).$result;
+	        _Query2.default.resolve(this);
+
+	        if (this.$config.datesAsObjects) {
+	            return _Transformer2.default.datesAsObjects(this.$result, this.$config.dateFields);
+	        }
+
+	        return this.$result;
 	    },
 
 	    first: function first() {
@@ -539,11 +549,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.default = Where;
 
-	var _Config = __webpack_require__(3);
-
-	var _Config2 = _interopRequireDefault(_Config);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _Constants = __webpack_require__(3);
 
 	function Where(field, operator, value, $not) {
 	    this.name = $not ? 'whereNot' : 'where';
@@ -575,7 +581,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            invalidOperatorException.call(this, this.operator);
 	        }
 
-	        var hasValidOperator = _Config2.default.validOperators.indexOf(this.operator) > -1;
+	        var hasValidOperator = _Constants.VALID_OPERATORS.indexOf(this.operator) > -1;
 
 	        if (hasValidOperator) {
 	            // This handles .whereUndefined(), whereNull(), whereFalse() or whereTrue()
@@ -642,65 +648,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.overrideConfig = overrideConfig;
-
-	var _Environment = __webpack_require__(4);
-
-	var _Constants = __webpack_require__(5);
-
-	var Config = {
-
-	    debug: false,
-
-	    dateFields: [],
-
-	    dateAsObjects: true,
-
-	    integrations: {
-	        moment: {
-	            active: false,
-	            factory: null
-	        }
-	    },
-
-	    validOperators: ['=', '===', '!=', '!==', '<', '<=', '>=', '>', '<>'],
-
-	    runningPlatform: _Environment.isBrowser ? _Constants.PLATFORM_BROWSER : _Constants.PLATFORM_NODE
-	};
-
-	exports.default = Config;
-	function overrideConfig(userConfig) {
-	    var cfg = {};
-
-	    // Default config
-	    for (var prop in Config) {
-	        cfg[prop] = Config[prop];
-	    } // User config
-	    for (var prop in userConfig) {
-	        cfg[prop] = userConfig[prop];
-	    }return cfg;
-	}
-
-/***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var isBrowser = exports.isBrowser = typeof window !== 'undefined' && Object.prototype.toString.call(window) !== '[object Object]';
-
-/***/ },
-/* 5 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -710,9 +657,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	var PLATFORM_NODE = exports.PLATFORM_NODE = 'nodejs';
 	var PLATFORM_BROWSER = exports.PLATFORM_BROWSER = 'browser';
+	var VALID_OPERATORS = exports.VALID_OPERATORS = ['=', '===', '!=', '!==', '<', '<=', '>=', '>', '<>'];
 
 /***/ },
-/* 6 */
+/* 4 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -761,7 +709,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 7 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -778,7 +726,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Where2 = _interopRequireDefault(_Where);
 
-	var _Config = __webpack_require__(3);
+	var _Config = __webpack_require__(6);
 
 	var _Config2 = _interopRequireDefault(_Config);
 
@@ -812,7 +760,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var date = new Date(this.value);
 
-	    if (date == 'Invalid Date' || this.value === null || this.value === undefined) {
+	    if (isNaN(date.getTime()) || this.value === null || this.value === undefined) {
 	        throw 'Value "' + this.value + '" is not a valid date.';
 	    }
 
@@ -824,43 +772,104 @@ return /******/ (function(modules) { // webpackBootstrap
 	WhereDate.prototype.resolve = function (elementValue) {
 	    if (this.valueIsMomentObject) {
 	        var dateValue = this.value._isUTC ? _Config2.default.integrations.moment.factory.utc(elementValue) : _Config2.default.integrations.moment.factory(elementValue);
+	        var valueTime = this.value.valueOf();
+	        var valueToCompareTime = dateValue.valueOf();
 	    } else {
 	        var dateValue = new Date(elementValue);
+	        var valueTime = this.value.getTime();
+	        var valueToCompareTime = dateValue.getTime();
 	    }
 
-	    if (dateValue.toString() == 'Invalid Date') {
-	        throw 'Invalid date "' + elementValue + '" in field "' + this.field + '".';
+	    if (isNaN(valueToCompareTime)) {
+	        throw 'Invalid date "' + elementValue + '" supplied in field "' + this.field + '".';
 	    }
 
 	    switch (this.operator) {
 	        case '=':
-	            var result = dateValue.toISOString() == this.value.toISOString();
+	            var result = valueTime == valueToCompareTime;
 	            break;
 
 	        case '!=':
 	        case '<>':
-	            var result = dateValue.toISOString() != this.value.toISOString();
+	            var result = valueTime != valueToCompareTime;
 	            break;
 
 	        case '<=':
-	            var result = dateValue <= this.value;
+	            var result = valueTime <= valueToCompareTime;
 	            break;
 
 	        case '<':
-	            var result = dateValue < this.value;
+	            var result = valueTime < valueToCompareTime;
 	            break;
 
 	        case '>=':
-	            var result = dateValue >= this.value;
+	            var result = valueTime >= valueToCompareTime;
 	            break;
 
 	        case '>':
-	            var result = dateValue > this.value;
+	            var result = valueTime > valueToCompareTime;
 	            break;
 	    }
 
 	    return this.not ? !result : result;
 	};
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.overrideConfig = overrideConfig;
+
+	var _Environment = __webpack_require__(7);
+
+	var _Constants = __webpack_require__(3);
+
+	var Config = {
+
+	    debug: false,
+
+	    dateAsObjects: true,
+
+	    dateFields: [],
+
+	    integrations: {
+	        moment: {
+	            active: false,
+	            factory: null
+	        }
+	    },
+
+	    runningPlatform: _Environment.isBrowser ? _Constants.PLATFORM_BROWSER : _Constants.PLATFORM_NODE
+	};
+
+	exports.default = Config;
+	function overrideConfig(userConfig) {
+	    var cfg = {};
+
+	    // Default config
+	    for (var prop in Config) {
+	        cfg[prop] = Config[prop];
+	    } // User config
+	    for (var prop in userConfig) {
+	        cfg[prop] = userConfig[prop];
+	    }return cfg;
+	}
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var isBrowser = exports.isBrowser = typeof window !== 'undefined' && Object.prototype.toString.call(window) !== '[object Object]';
 
 /***/ },
 /* 8 */
@@ -1732,6 +1741,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this.update(this.search(field, valueField), field, value);
 	    }
 	};
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _Crawler = __webpack_require__(14);
+
+	var _Crawler2 = _interopRequireDefault(_Crawler);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Transformer = Object.create({
+
+	    datesAsObjects: function datesAsObjects(arrayObjects, dateFields) {
+	        return arrayObjects.map(function (child) {
+	            for (var i = 0; i < dateFields.length; i++) {
+	                var fieldValue = _Crawler2.default.selectNestedObject(child, dateFields[i]);
+	                var fieldDate = new Date(fieldValue);
+
+	                if (isNaN(fieldDate.getTime())) {
+	                    throw 'Field ' + field[i] + ' has an invalid date value: ' + fieldValue;
+	                }
+
+	                _Crawler2.default.setNestedObjectValue(child, dateFields[i], fieldDate);
+	            }
+	        });
+	    }
+
+	});
+
+	exports.default = Transformer;
 
 /***/ }
 /******/ ])

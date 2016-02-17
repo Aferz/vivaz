@@ -5,9 +5,9 @@ const Config = {
     
     debug: false,
 
-    dateFields: [],
-
     dateAsObjects: true,
+    
+    dateFields: [],
 
     integrations: {
         moment: {
@@ -15,8 +15,6 @@ const Config = {
             factory: null,
         }
     },
-    
-    validOperators: [ '=', '===', '!=', '!==', '<', '<=', '>=', '>', '<>' ],
     
     runningPlatform: isBrowser ? PLATFORM_BROWSER : PLATFORM_NODE
 };

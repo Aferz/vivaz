@@ -1,4 +1,4 @@
-import Config from '../config/Config';
+import { VALID_OPERATORS } from '../config/Constants';
 
 export default function Where( field, operator, value, $not )
 {
@@ -34,7 +34,7 @@ Where.prototype = {
             invalidOperatorException.call( this, this.operator );
         }
 
-        let hasValidOperator = Config.validOperators.indexOf( this.operator ) > -1;
+        let hasValidOperator = VALID_OPERATORS.indexOf( this.operator ) > -1;
 
         if( hasValidOperator )
         {

@@ -3,12 +3,16 @@ import Collection from '../../../src/util/Collection';
 
 describe( 'Builder', function()
 {
-    var builder = function( data )
+    var user1 = { id: 1, name: 'Alex', birthdate: '1991-08-29', car: { brand: 'Hyundai' } };
+    var user2 = { id: 2, name: 'Tamara', birthdate: '1991-06-19', car: { brand: 'Hyundai' } };
+    var users = [ user1, user2 ];
+
+    var builder = function( data, cfg )
     {
-        return new Builder( data || { id: 1, name: 'Alex' } );
+        return new Builder( data || { id: 1, name: 'Alex' }, cfg || {} );
     }
 
-    it( 'Instantiation', function()
+    it( 'Instantiation fails if nothing, null, undefined, [] or {} is passed', function()
     {
         expect( function(){ new Builder(); } )
             .toThrow( 'No data supplied!');
@@ -24,11 +28,10 @@ describe( 'Builder', function()
 
         expect( function(){ new Builder( {} ); } )
             .toThrow( 'No data supplied!');
+    } );
 
-        var b = new Builder( { id: 1, name: 'Alex' } );
-        expect( Array.isArray( b.$original ) ).toBeTruthy();
-        expect( b.$original.length ).toBe( 1 );
-
+    it( 'Instantiation', function()
+    {
         var b = new Builder( [ { id: 1, name: 'Alex' } ] );
         expect( Array.isArray( b.$original ) ).toBeTruthy();
         expect( b.$original.length ).toBe( 1 );
@@ -37,10 +40,6 @@ describe( 'Builder', function()
         expect( b.$where ).toEqual( { and: [], or: [] } );
         expect( b.$groupBy ).toEqual( [] );
         expect( b.$orderBy ).toEqual( [] );
-
-        // With configuration
-        var b = new Builder( { id: 1, name: 'Alex' }, { value1: 'value1' } );
-        expect( b.$config.value1 ).toBe( 'value1' );
     } );
 
     it( 'Clean', function()
@@ -92,7 +91,7 @@ describe( 'Builder', function()
         expect( b.$where.or.length ).toBe( 2 );
     } );
 
-    it( 'Add group by clause', function()
+    it( 'Add "group by" clause', function()
     {
         expect( builder().groupBy( 'field' ).$groupBy[0] ).toBe( 'field' );
 
@@ -109,7 +108,7 @@ describe( 'Builder', function()
         expect( b.$groupBy.length ).toBe( 2 );
     } );
 
-    it( 'Add order by clause', function()
+    it( 'Add "order by" clause', function()
     {
         expect( builder().orderBy( 'id', 'asc' ).$orderBy[0].name ).toBe( 'orderBy' );
         expect( builder().orderByDate( 'id', 'asc' ).$orderBy[0].name ).toBe( 'orderByDate' );
@@ -118,7 +117,7 @@ describe( 'Builder', function()
         expect( b.$orderBy.length ).toBe( 3 );
     } );
 
-    it( 'Add select clause', function()
+    it( 'Add "select" clause', function()
     {
         expect( builder().select( 'field' ).$select[0] ).toBe( 'field' );
 
@@ -135,65 +134,85 @@ describe( 'Builder', function()
         expect( b.$select.length ).toBe( 2 );
     } );
 
-    it( 'Fetch data', function()
+    describe( 'Fetch data', function()
     {
-        var user1 = { id: 1, name: 'Alex', car: { brand: 'Hyundai' } };
-        var user2 = { id: 2, name: 'Tamara', car: { brand: 'Hyundai' } };
-        var users = [ user1, user2 ];
+        it( 'Get', function()
+        {
+            var b = builder( users );
+            expect( b.get() ).toEqual( users );
+            expect( b.$result ).toEqual( users );
+        } );
 
-        var b = builder( users );
-        expect( b.get() ).toEqual( users );
-        expect( b.$result ).toEqual( users );
+        it( 'First', function()
+        {
+            var b = builder( users );
+            expect( b.first() ).toEqual( user1 );
+            expect( b.$result ).toEqual( users );
+        } );
 
-        var b = builder( users );
-        expect( b.first() ).toEqual( user1 );
-        expect( b.$result ).toEqual( users );
+        it( 'Last', function()
+        {
+            var b = builder( users );
+            expect( b.last() ).toEqual( user2 );
+            expect( b.$result ).toEqual( users );
+        } );
 
-        var b = builder( users );
-        expect( b.last() ).toEqual( user2 );
-        expect( b.$result ).toEqual( users );
+        it( 'Count', function()
+        {
+            var b = builder( users );
+            expect( b.count() ).toEqual( 2 );
+            expect( b.$result ).toEqual( users );
+        } );
+    } );
 
-        var b = builder( users );
-        expect( b.count() ).toEqual( 2 );
-        expect( b.$result ).toEqual( users );
+    describe( 'Fetch data grouped by a field', function()
+    {
+        it( 'Get', function()
+        {
+            var b = builder( users ).groupBy( 'car.brand' );
+            expect( b.get() ).toEqual( { 'Hyundai': [ user1, user2 ] } );
+        } );
 
-        var b = builder( users ).groupBy( 'car.brand' );
-        expect( b.get() ).toEqual( { 'Hyundai': [ user1, user2 ] } );
+        it( 'First', function()
+        {
+            var b = builder( users ).groupBy( 'car.brand' );
+            expect( b.first() ).toEqual( { 'Hyundai': [ user1, user2 ] } );
+        } );   
 
-        var b = builder( users ).groupBy( 'car.brand' );
-        expect( b.first() ).toEqual( { 'Hyundai': [ user1, user2 ] } );
+        it( 'Last', function()
+        {
+            var b = builder( users ).groupBy( 'car.brand' );
+            expect( b.last() ).toEqual( { 'Hyundai': [ user1, user2 ] } );
+        } );   
 
-        var b = builder( users ).groupBy( 'car.brand' );
-        expect( b.last() ).toEqual( { 'Hyundai': [ user1, user2 ] } );
+        it( 'Count', function()
+        {
+            var b = builder( users ).groupBy( 'car.brand' );
+            expect( b.count() ).toEqual( 1 );
+        } );   
+    } );
 
-        var b = builder( users ).groupBy( 'car.brand' );
-        expect( b.count() ).toEqual( 1 );
-
-        // Collection
+    it( 'Collects data', function()
+    {
         var b = builder( users );
         expect( b.collect() instanceof Collection ).toBeTruthy();
         expect( b.collect().$data.length ).toBe( 2 );
+    } );
 
+    it( 'Can\'t collect grouped result', function()
+    {
         var b = builder( users ).groupBy( 'car.brand' );
         expect( function(){ b.collect() } ).toThrow( 'Can\'t make a collection from grouped result.' );
     } );
 
     it( 'Paginate data', function()
     {
-        var user1 = { id: 1, name: 'Alex', car: { brand: 'Hyundai' } };
-        var user2 = { id: 2, name: 'Tamara', car: { brand: 'Hyundai' } };
-        var users = [ user1, user2 ];
-
         var b = builder( users ).groupBy( 'name' );
         expect( function(){ b.paginate() } ).toThrow( 'You can\'t paginate a grouped result.' );
     } );
 
     it( 'To model', function()
     {
-        var user1 = { id: 1, name: 'Alex', car: { brand: 'Hyundai' } };
-        var user2 = { id: 2, name: 'Tamara', car: { brand: 'Hyundai' } };
-        var users = [ user1, user2 ];
-
         expect( function(){ builder( users ).toModel() } )
             .toThrow( 'Constructor not supplied.' );
 
@@ -219,5 +238,12 @@ describe( 'Builder', function()
         expect( userModelInstances[0].car ).toEqual( user1.car );
         expect( userModelInstances[0].car.brand ).toEqual( user1.car.brand );
         expect( userModelInstances[0].hasOwnProperty( 'func' ) ).toBeTruthy();
+    } );
+
+    it( 'Return date as objects if it\'s activated in config', function()
+    {
+        var result = builder( users, { datesAsObjects: true, dateFields: [ 'birthdate' ] } ).get();
+        console.log( result );
+        //expect( result[0].birthdate instanceof Date ).toBeTruthy();
     } );
 } );

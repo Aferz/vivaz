@@ -45,43 +45,25 @@ describe( 'Where Clause', function()
         expect( w.not ).toBeFalsy();
 
         var w = new Where( 'id', '!=', 'value' );
-        expect( w.name ).toBe( 'where' );
         expect( w.field ).toBe( 'id' );
         expect( w.operator ).toBe( '!=' );
         expect( w.value ).toBe( 'value' );
-        expect( w.not ).toBeFalsy();
 
         // Where Undefined
         var w = new Where( 'id', '===', undefined );
-        expect( w.name ).toBe( 'where' );
-        expect( w.field ).toBe( 'id' );
-        expect( w.operator ).toBe( '===' );
         expect( w.value ).toBeUndefined();
-        expect( w.not ).toBeFalsy();
 
         // Where Null
         var w = new Where( 'id', '!==', null );
-        expect( w.name ).toBe( 'where' );
-        expect( w.field ).toBe( 'id' );
-        expect( w.operator ).toBe( '!==' );
         expect( w.value ).toBeNull();
-        expect( w.not ).toBeFalsy();
 
         // Where True
         var w = new Where( 'id', '===', true );
-        expect( w.name ).toBe( 'where' );
-        expect( w.field ).toBe( 'id' );
-        expect( w.operator ).toBe( '===' );
         expect( w.value ).toBeTruthy();
-        expect( w.not ).toBeFalsy();
 
         // Where False
         var w = new Where( 'id', '!==', false );
-        expect( w.name ).toBe( 'where' );
-        expect( w.field ).toBe( 'id' );
-        expect( w.operator ).toBe( '!==' );
         expect( w.value ).toBeFalsy();
-        expect( w.not ).toBeFalsy();
 
         var w = new Where( 'id', '!=', 'value', true );
         expect( w.name ).toBe( 'whereNot' );
@@ -90,49 +72,47 @@ describe( 'Where Clause', function()
 
     it( 'Resolves correctly', function()
     {
-        var user = { id: 1, name: 'Alex', attr1: undefined, attr2: null, attr3: true, attr4: false };
-
         // Positive
-        expect( new Where( 'id', '=', 1 ).resolve( user.id ) ).toBeTruthy();
-        expect( new Where( 'id', '!=', 1 ).resolve( user.id ) ).toBeFalsy();
-        expect( new Where( 'id', '>', 1 ).resolve( user.id ) ).toBeFalsy();
-        expect( new Where( 'id', '<', 1 ).resolve( user.id ) ).toBeFalsy();
-        expect( new Where( 'id', '<=', 1 ).resolve( user.id ) ).toBeTruthy();
-        expect( new Where( 'id', '>=', 1 ).resolve( user.id ) ).toBeTruthy();
+        expect( new Where( 'id', '=', 1 ).resolve( 1 ) ).toBeTruthy();
+        expect( new Where( 'id', '!=', 1 ).resolve( 1 ) ).toBeFalsy();
+        expect( new Where( 'id', '>', 1 ).resolve( 1 ) ).toBeFalsy();
+        expect( new Where( 'id', '<', 1 ).resolve( 1 ) ).toBeFalsy();
+        expect( new Where( 'id', '<=', 1 ).resolve( 1 ) ).toBeTruthy();
+        expect( new Where( 'id', '>=', 1 ).resolve( 1 ) ).toBeTruthy();
 
         // Negative
-        expect( new Where( 'id', '=', 1, true ).resolve( user.id ) ).not.toBeTruthy();
-        expect( new Where( 'id', '!=', 1, true ).resolve( user.id ) ).not.toBeFalsy();
-        expect( new Where( 'id', '>', 1, true ).resolve( user.id ) ).not.toBeFalsy();
-        expect( new Where( 'id', '<', 1, true ).resolve( user.id ) ).not.toBeFalsy();
-        expect( new Where( 'id', '<=', 1, true ).resolve( user.id ) ).not.toBeTruthy();
-        expect( new Where( 'id', '>=', 1, true ).resolve( user.id ) ).not.toBeTruthy();
+        expect( new Where( 'id', '=', 1, true ).resolve( 1 ) ).not.toBeTruthy();
+        expect( new Where( 'id', '!=', 1, true ).resolve( 1 ) ).not.toBeFalsy();
+        expect( new Where( 'id', '>', 1, true ).resolve( 1 ) ).not.toBeFalsy();
+        expect( new Where( 'id', '<', 1, true ).resolve( 1 ) ).not.toBeFalsy();
+        expect( new Where( 'id', '<=', 1, true ).resolve( 1 ) ).not.toBeTruthy();
+        expect( new Where( 'id', '>=', 1, true ).resolve( 1 ) ).not.toBeTruthy();
 
         // Strict
-        expect( new Where( 'id', '===', 1 ).resolve( user.id ) ).toBeTruthy();
-        expect( new Where( 'id', '===', '1' ).resolve( user.id ) ).toBeFalsy();
-        expect( new Where( 'id', '===', 1, true ).resolve( user.id ) ).not.toBeTruthy();
-        expect( new Where( 'id', '===', '1', true ).resolve( user.id ) ).not.toBeFalsy();
-        expect( new Where( 'id', '!==', 1 ).resolve( user.id ) ).not.toBeTruthy();
-        expect( new Where( 'id', '!==', '1' ).resolve( user.id ) ).not.toBeFalsy();
-        expect( new Where( 'id', '!==', 1, true ).resolve( user.id ) ).toBeTruthy();
-        expect( new Where( 'id', '!==', '1', true ).resolve( user.id ) ).toBeFalsy();
+        expect( new Where( 'id', '===', 1 ).resolve( 1 ) ).toBeTruthy();
+        expect( new Where( 'id', '===', '1' ).resolve( 1 ) ).toBeFalsy();
+        expect( new Where( 'id', '===', 1, true ).resolve( 1 ) ).not.toBeTruthy();
+        expect( new Where( 'id', '===', '1', true ).resolve( 1 ) ).not.toBeFalsy();
+        expect( new Where( 'id', '!==', 1 ).resolve( 1 ) ).not.toBeTruthy();
+        expect( new Where( 'id', '!==', '1' ).resolve( 1 ) ).not.toBeFalsy();
+        expect( new Where( 'id', '!==', 1, true ).resolve( 1 ) ).toBeTruthy();
+        expect( new Where( 'id', '!==', '1', true ).resolve( 1 ) ).toBeFalsy();
 
         // Where Undefined
-        expect( new Where( 'id', '===', undefined ).resolve( user.attr1 ) ).toBeTruthy();
-        expect( new Where( 'id', '!==', undefined ).resolve( user.attr1 ) ).toBeFalsy();
-        expect( new Where( 'id', '===', undefined ).resolve( user.attr2 ) ).toBeFalsy();
+        expect( new Where( 'id', '===', undefined ).resolve( undefined ) ).toBeTruthy();
+        expect( new Where( 'id', '!==', undefined ).resolve( undefined ) ).toBeFalsy();
+        expect( new Where( 'id', '===', undefined ).resolve( null ) ).toBeFalsy();
 
         // Where Null
-        expect( new Where( 'id', '===', null ).resolve( user.attr2 ) ).toBeTruthy();
-        expect( new Where( 'id', '!==', null ).resolve( user.attr2 ) ).toBeFalsy();
+        expect( new Where( 'id', '===', null ).resolve( null ) ).toBeTruthy();
+        expect( new Where( 'id', '!==', null ).resolve( null ) ).toBeFalsy();
 
         // Where True
-        expect( new Where( 'id', '===', true ).resolve( user.attr3 ) ).toBeTruthy();
-        expect( new Where( 'id', '!==', true ).resolve( user.attr3 ) ).toBeFalsy();
+        expect( new Where( 'id', '===', true ).resolve( true ) ).toBeTruthy();
+        expect( new Where( 'id', '!==', true ).resolve( true ) ).toBeFalsy();
 
         // Where False
-        expect( new Where( 'id', '===', false ).resolve( user.attr4 ) ).toBeTruthy();
-        expect( new Where( 'id', '!==', false ).resolve( user.attr4 ) ).toBeFalsy();
+        expect( new Where( 'id', '===', false ).resolve( false ) ).toBeTruthy();
+        expect( new Where( 'id', '!==', false ).resolve( false ) ).toBeFalsy();
     } );
 } );
